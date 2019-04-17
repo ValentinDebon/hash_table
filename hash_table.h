@@ -53,6 +53,7 @@ hash_table_remove(struct hash_table *table,
  * @param table Valid hash table.
  * @param key Key associated to the couple to find.
  * @return The value associated, or NULL if it doesn't exist.
+ */
 hash_table_value_t *
 hash_table_find(const struct hash_table *table,
 	hash_table_key_t key);

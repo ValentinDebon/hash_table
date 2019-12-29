@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #define HASH_TABLE_BUCKETOF(table, key) ((table)->buckets + (((table)->size - 1) & (key)))
-#define HASH_TABLE_BUCKET_DEFAULT 16
 
 struct hash_table_pair {
 	hash_table_value_t *value;
@@ -18,15 +17,17 @@ struct hash_table_bucket {
 
 struct hash_table {
 	unsigned long size;
+	unsigned long bucketdefault;
 	struct hash_table_bucket buckets[];
 };
 
 struct hash_table *
-hash_table_create(unsigned long power) {
-	const unsigned long size = 1 << power;
+hash_table_create(unsigned long sizepower, unsigned long bucketdefaultpower) {
+	const unsigned long size = 1 << sizepower;
 	struct hash_table *table = calloc(1, sizeof(*table) + size * sizeof(*table->buckets));
 
 	table->size = size;
+	table->bucketdefault = 1 << bucketdefaultpower;
 
 	return table;
 }
@@ -57,17 +58,17 @@ hash_table_update(struct hash_table *table, hash_table_key_t key, hash_table_val
 
 	if(current == end) {
 		if(bucket->count == bucket->capacity) {
-			bucket->capacity = bucket->capacity == 0 ? HASH_TABLE_BUCKET_DEFAULT : (bucket->capacity << 1);
+			bucket->capacity = bucket->capacity == 0 ? table->bucketdefault : (bucket->capacity << 1);
 			bucket->pairs = realloc(bucket->pairs, bucket->capacity * sizeof(*bucket->pairs));
 		}
+		bucket->pairs[bucket->count] = (struct hash_table_pair) { .value = value, .key = key };
 		bucket->count++;
 		updated = NULL;
 	} else {
+		current->value = value;
+		current->key = key;
 		updated = current->value;
 	}
-
-	current->value = value;
-	current->key = key;
 
 	return updated;
 }

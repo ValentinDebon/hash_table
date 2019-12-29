@@ -5,7 +5,7 @@ typedef unsigned long hash_table_key_t;
 typedef void hash_table_value_t;
 
 struct hash_table *
-hash_table_create(unsigned long power);
+hash_table_create(unsigned long sizepower, unsigned long bucketdefaultpower);
 
 void
 hash_table_destroy(struct hash_table *table);

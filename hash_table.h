@@ -1,3 +1,9 @@
+/*
+	hash_table.h
+	Copyright (c) 2019, Valentin Debon
+	This file is part of the hash_table repository
+	subject the BSD 3-Clause License, see LICENSE
+*/
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 

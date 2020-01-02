@@ -63,17 +63,17 @@ hash_table_update(struct hash_table *table, hash_table_key_t key, hash_table_val
 	}
 
 	if(current == end) {
+		updated = NULL;
 		if(bucket->count == bucket->capacity) {
 			bucket->capacity = bucket->capacity == 0 ? table->bucketdefault : (bucket->capacity << 1);
 			bucket->pairs = realloc(bucket->pairs, bucket->capacity * sizeof(*bucket->pairs));
 		}
 		bucket->pairs[bucket->count] = (struct hash_table_pair) { .value = value, .key = key };
 		bucket->count++;
-		updated = NULL;
 	} else {
+		updated = current->value;
 		current->value = value;
 		current->key = key;
-		updated = current->value;
 	}
 
 	return updated;
